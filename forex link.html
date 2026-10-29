@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ForexLink — Currency exchange, made convenient</title>
+<style>
+:root {
+  --site-primary: #123D35;
+  --site-on-primary: #FFFFFF;
+  --site-secondary: #D8F06A;
+  --site-on-secondary: #18251B;
+  --site-background: #F4F6F1;
+  --site-on-background: #17251F;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--site-font-body); color: var(--site-on-background); background: var(--site-background); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app-root { min-height: 100vh; width: 100%; background-color: light-dark(var(--site-background), #101714); color: light-dark(var(--site-on-background), #edf3ed); border-radius: 0; overflow: hidden; }
+.topbar { height: 78px; display:flex; align-items:center; justify-content:space-between; padding: 0 clamp(20px, 5vw, 76px); border-bottom:1px solid rgba(100,120,104,.18); background: light-dark(#FBFCF9, #17211c); }
+.brand { display:flex; align-items:center; gap:11px; font-weight:850; font-size:21px; letter-spacing:-.8px; color: light-dark(#123D35,#e9f4e8); }
+.brand-mark { width:36px;height:36px;border-radius:12px;background:var(--site-primary);display:grid;place-items:center;color:white; }
+.brand-mark svg { width:22px;height:22px; }
+.nav { display:flex; align-items:center; gap:30px; color:light-dark(#53645a,#c4d0c6); font-size:13px; font-weight:650; }
+.nav a { text-decoration:none;color:inherit; }
+.nav a:hover { color:var(--site-primary); }
+.nav-actions { display:flex;align-items:center;gap:12px; }
+.btn { border:0; border-radius:12px; padding:12px 17px; font-weight:750; font-size:13px; transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.btn:hover { transform:translateY(-1px); box-shadow:0 8px 18px rgba(20,48,36,.12); }
+.btn-primary { background:var(--site-primary);color:white; }
+.btn-lime { background:var(--site-secondary);color:var(--site-on-secondary); }
+.btn-outline { background:transparent;color:inherit;border:1px solid rgba(115,135,120,.32); }
+.hero { padding: clamp(44px,7vw,88px) clamp(20px,5vw,76px) 64px; display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;max-width:1500px;margin:auto; }
+.eyebrow { display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(18,61,53,.15);background:light-dark(#e9f1e5,#25362d);color:light-dark(#315c45,#d5f0d8);padding:8px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase; }
+.dot { width:7px;height:7px;border-radius:50%;background:#a5d94f;box-shadow:0 0 0 4px rgba(165,217,79,.16); }
+h1 { font-family:var(--site-font-heading);font-size:calc(clamp(42px,5.2vw,72px) * var(--site-heading-scale));line-height:1.03;letter-spacing:-3.6px;margin:23px 0 20px;max-width:660px;color:light-dark(#17382e,#f2f6ef); }
+h1 span { color:light-dark(#56815e,#c7e86a); }
+.hero-copy { max-width:510px;line-height:1.75;font-size:16px;color:light-dark(#66756a,#bac7bc);margin:0 0 27px; }
+.hero-actions { display:flex;gap:12px;flex-wrap:wrap; }
+.trustline { margin-top:27px;display:flex;align-items:center;gap:10px;color:light-dark(#6b786e,#aab8ad);font-size:12px; }
+.avatar-stack { display:flex; }
+.avatar { width:25px;height:25px;border:2px solid var(--site-background);border-radius:50%;margin-left:-6px;background:#d6b18e;display:grid;place-items:center;font-size:10px; }
+.avatar:first-child { margin-left:0;background:#d4b28e; }.avatar:nth-child(2){background:#7a9e84}.avatar:nth-child(3){background:#d9c4a7}.avatar:nth-child(4){background:#8b9db2}
+.hero-visual { position:relative;min-width:0;padding:20px 0; }
+.glow { position:absolute;width:78%;height:80%;right:5%;top:8%;border-radius:50%;background:#dceba9;filter:blur(65px);opacity:var(--site-decoration-opacity);z-index:0; }
+.exchange-card { position:relative;z-index:1;max-width:510px;margin:auto;background:light-dark(#fff,#1b2821);border:1px solid light-dark(#e6ebe3,#2d3a31);border-radius:26px;padding:27px;box-shadow:0 24px 80px rgba(22,53,35,.12); }
+.card-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:23px; }
+.card-head h2 { margin:0;font-size:17px;letter-spacing:-.4px; }
+.live-pill { display:flex;align-items:center;gap:6px;font-size:10px;font-weight:800;color:#3e8a52;background:#eaf7e8;padding:7px 9px;border-radius:99px; }
+.field-label { font-size:11px;font-weight:750;color:light-dark(#758177,#adbbb0);margin:0 0 8px;display:block; }
+.money-field { display:flex;align-items:center;justify-content:space-between;padding:15px 14px;border:1px solid light-dark(#e2e8e0,#39473c);border-radius:14px;background:light-dark(#fbfcfa,#202e25);gap:10px; }
+.amount-input { min-width:0;width:55%;border:0;outline:0;background:transparent;color:inherit;font-size:24px;font-weight:800;letter-spacing:-.8px; }
+.currency-select { display:flex;align-items:center;gap:8px;border:0;background:transparent;color:inherit;font-weight:800;cursor:pointer;max-width:48%; }
+.currency-select select { background:transparent;border:0;color:inherit;font-weight:800;outline:0;max-width:110px; }
+.currency-select option { color:#17251F;background:#fff; }
+.flag { font-size:22px; }
+.swap-row { height:30px;display:flex;justify-content:center;align-items:center;position:relative; }
+.swap-btn { width:36px;height:36px;border-radius:12px;border:4px solid light-dark(#fff,#1b2821);background:var(--site-secondary);display:grid;place-items:center;color:#20382a;z-index:1;font-size:18px;font-weight:900; }
+.rate-note { display:flex;justify-content:space-between;gap:12px;font-size:11px;color:light-dark(#758177,#adbbb0);margin:17px 0 20px; }
+.rate-note strong { color:light-dark(#355b42,#d8f06a); }
+.full { width:100%;padding:15px; }
+.secure-note { text-align:center;font-size:10px;color:light-dark(#859087,#9aaba0);margin:12px 0 0; }
+.section { padding:70px clamp(20px,5vw,76px); }
+.section-inner { max-width:1350px;margin:auto; }
+.section-heading { display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:26px; }
+.kicker { color:light-dark(#658a58,#c6e86a);font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:1.5px; }
+h2.section-title { margin:9px 0 0;font-size:calc(clamp(27px,3.2vw,42px) * var(--site-heading-scale));line-height:1.12;letter-spacing:-1.8px;color:light-dark(#18372c,#eff5ed); }
+.section-sub { max-width:420px;color:light-dark(#758177,#aebdb1);font-size:13px;line-height:1.7;margin:0; }
+.rates-section { background:light-dark(#eaf0e7,#141e18); }
+.rate-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:14px; }
+.rate-card { border:1px solid light-dark(#dce5d9,#2d3a31);border-radius:17px;padding:20px;background:light-dark(#fbfcfa,#1b2821);transition:transform .2s ease,border-color .2s ease; }
+.rate-card:hover { transform:translateY(-3px);border-color:#a8c779; }
+.rate-top { display:flex;align-items:center;justify-content:space-between;margin-bottom:18px; }
+.currency-name { display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800; }
+.currency-name .flag { font-size:23px; }
+.code { display:block;font-size:10px;color:light-dark(#8a968c,#a7b5a9);font-weight:600;margin-top:3px; }
+.rate-value { font-size:22px;font-weight:850;letter-spacing:-.8px; }
+.rate-caption { color:light-dark(#879388,#a6b3a8);font-size:10px;margin-top:6px; }
+.provider-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+.provider-card { padding:22px;border-radius:18px;border:1px solid light-dark(#e0e7de,#2d3b31);background:light-dark(#fff,#1b2821); }
+.provider-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:20px; }
+.provider-icon { width:43px;height:43px;border-radius:14px;background:light-dark(#e9f2e3,#2c4030);display:grid;place-items:center;font-size:20px; }
+.demo-tag { font-size:9px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;padding:6px 8px;border-radius:99px;background:light-dark(#f2f0e5,#3a3928);color:light-dark(#82733a,#e5d77a); }
+.provider-card h3 { margin:0 0 5px;font-size:16px; }
+.provider-card p { margin:0;color:light-dark(#7a877d,#aebbb0);font-size:12px;line-height:1.6; }
+.provider-bottom { display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid light-dark(#edf0eb,#303d33); }
+.provider-bottom strong { font-size:13px; }.provider-bottom span { display:block;color:light-dark(#879388,#a5b2a7);font-size:10px;margin-top:3px; }
+.text-btn { border:0;background:transparent;color:light-dark(#315c45,#d8f06a);font-weight:800;font-size:12px; }
+.steps { display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px; }
+.step { padding:25px;border-radius:18px;background:light-dark(#fff,#1b2821);border:1px solid light-dark(#e2e8df,#2c3b31); }
+.step-num { width:35px;height:35px;border-radius:12px;background:var(--site-secondary);color:#233527;display:grid;place-items:center;font-weight:900;font-size:13px;margin-bottom:20px; }
+.step h3 { margin:0 0 9px;font-size:16px; }.step p { margin:0;color:light-dark(#77847a,#adbbb0);font-size:12px;line-height:1.75; }
+.cta { margin:0 clamp(20px,5vw,76px) 65px;background:var(--site-primary);border-radius:24px;padding:38px 42px;display:flex;align-items:center;justify-content:space-between;gap:24px;color:white;position:relative;overflow:hidden; }
+.cta::after { content:"";position:absolute;width:270px;height:270px;right:20%;top:-180px;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 35px rgba(255,255,255,.03),0 0 0 70px rgba(255,255,255,.025);pointer-events:none; }
+.cta h2 { margin:0 0 8px;font-size:clamp(23px,3vw,34px);letter-spacing:-1.2px; }.cta p { margin:0;color:#c2d6c8;font-size:13px;line-height:1.7;max-width:510px; }
+.footer { padding:25px clamp(20px,5vw,76px);border-top:1px solid light-dark(#dfe6dc,#2c3b31);display:flex;justify-content:space-between;align-items:center;gap:20px;color:light-dark(#879388,#a5b2a7);font-size:11px; }
+.footer .brand { font-size:16px; }.footer .brand-mark { width:28px;height:28px;border-radius:9px; }.disclaimer { text-align:center;padding:13px 20px;background:light-dark(#fff7df,#302b1a);color:light-dark(#78653a,#e5d79e);font-size:10px;line-height:1.6; }
+.modal-backdrop { position:fixed;inset:0;background:rgba(7,18,12,.62);display:none;align-items:center;justify-content:center;padding:18px;z-index:50; }
+.modal-backdrop.open { display:flex; }
+.modal { width:min(100%,480px);background:light-dark(#fff,#1b2821);color:light-dark(#17251f,#edf3ed);border-radius:22px;padding:27px;box-shadow:0 30px 90px rgba(0,0,0,.3);max-height:90vh;overflow:auto; }
+.modal-head { display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; }.modal-head h2 { margin:0;font-size:22px;letter-spacing:-.8px; }.close-btn { border:0;background:light-dark(#eef2eb,#2c3a30);color:inherit;border-radius:10px;width:34px;height:34px;font-size:20px; }
+.form-row { margin:14px 0; }.form-row label { display:block;font-size:11px;font-weight:800;margin-bottom:7px;color:light-dark(#657368,#b3c0b5); }.form-row input,.form-row select { width:100%;padding:13px 12px;border-radius:11px;border:1px solid light-dark(#dfe6dc,#3a493d);background:light-dark(#fbfcfa,#202e25);color:inherit;outline-color:#9fc76b; }
+.form-hint { color:light-dark(#849087,#a7b5a9);font-size:10px;line-height:1.6;margin-top:14px; }
+.bureau-panel { border:1px solid light-dark(#dfe7dc,#304035);border-radius:22px;background:light-dark(#fff,#1b2821);padding:clamp(18px,3vw,30px); }
+.bureau-top { display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px; }
+.bureau-top h3 { margin:0 0 5px;font-size:20px;letter-spacing:-.6px; }.bureau-top p { margin:0;color:light-dark(#77847a,#adbbb0);font-size:12px;line-height:1.6; }
+.reference-pill { border-radius:99px;padding:8px 11px;background:light-dark(#eaf4e6,#2a3d2d);color:light-dark(#386447,#d8f06a);font-size:10px;font-weight:850;white-space:nowrap; }
+.bureau-rate-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
+.bureau-rate { border:1px solid light-dark(#e2e8df,#344338);border-radius:14px;padding:14px;background:light-dark(#fafcf8,#202e25); }
+.bureau-rate h4 { margin:0 0 12px;font-size:13px; }.bureau-rate label { display:block;font-size:10px;color:light-dark(#77847a,#adbbb0);font-weight:750;margin:9px 0 5px; }
+.bureau-rate input { width:100%;min-width:0;padding:10px;border:1px solid light-dark(#dce5d9,#3b4a3e);border-radius:9px;background:light-dark(#fff,#17211c);color:inherit;font-weight:750; }
+.bureau-actions { display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px;flex-wrap:wrap; }.bureau-status { font-size:11px;color:light-dark(#758177,#adbbb0);line-height:1.6; }
+.inbox-demo { margin-top:24px;border-top:1px solid light-dark(#e6ebe3,#344338);padding-top:20px; }.inbox-demo h4 { margin:0 0 12px;font-size:14px; }
+.enquiry-row { display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid light-dark(#e2e8df,#344338);border-radius:13px;padding:14px;margin-top:9px; }.enquiry-row strong { display:block;font-size:12px; }.enquiry-row span { display:block;font-size:10px;color:light-dark(#7b887e,#adbbb0);margin-top:5px;line-height:1.5; }.enquiry-actions { display:flex;gap:7px;flex-shrink:0; }.enquiry-actions .btn { padding:9px 11px;font-size:11px; }
+.toast { position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:#173d2d;color:white;padding:13px 18px;border-radius:12px;box-shadow:0 12px 35px #0002;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:100;max-width:90%;text-align:center; }
+.toast.show { opacity:1;transform:translate(-50%,0); }
+@media(max-width:1000px){.nav{gap:16px}.hero{gap:25px}.rate-grid{grid-template-columns:repeat(2,1fr)}.bureau-rate-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:760px){.topbar{height:68px}.nav{display:none}.nav-actions .btn-outline{display:none}.hero{grid-template-columns:1fr;padding-top:48px;gap:20px}h1{letter-spacing:-2.3px}.hero-visual{padding-top:15px}.exchange-card{padding:21px}.section-heading{display:block}.section-sub{margin-top:12px}.provider-grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr;gap:12px}.cta{margin-bottom:40px;padding:28px;align-items:flex-start;flex-direction:column}.footer{align-items:flex-start;flex-direction:column}.section{padding-top:52px;padding-bottom:52px}.bureau-top{align-items:flex-start;flex-direction:column}.enquiry-row{align-items:flex-start;flex-direction:column}.enquiry-actions{width:100%} }
+@media(max-width:430px){.rate-grid{grid-template-columns:1fr 1fr;gap:9px}.rate-card{padding:14px}.rate-value{font-size:18px}.money-field{padding:12px 10px}.amount-input{font-size:21px}.currency-select{gap:4px}.currency-select select{max-width:78px;font-size:12px}.hero-actions .btn{width:100%}.trustline{align-items:flex-start}.bureau-rate-grid{grid-template-columns:1fr}.bureau-actions>.btn{width:100%} }
+</style>
+</head>
+<body>
+<div class="app-root" id="appRoot">
+  <header class="topbar">
+    <a href="#home" class="brand" style="text-decoration:none"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h15M15 4l4 4-4 4M20 16H5m4-4-4 4 4 4"/></svg></span>ForexLink</a>
+    <nav class="nav"><a href="#rates">Exchange rates</a><a href="#providers">Providers</a><a href="#bureau">For bureaus</a><a href="#how">How it works</a></nav>
+    <div class="nav-actions"><button class="btn btn-outline" onclick="openModal('signin')">Sign in</button><button class="btn btn-primary" onclick="openModal('exchange')">Start exchange ↗</button></div>
+  </header>
+  <main id="home">
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Currency exchange, reimagined</div>
+        <h1>Your time is valuable.<br><span>Your money should move.</span></h1>
+        <p class="hero-copy">Compare exchange offers, connect with verified forex providers, and request currency delivery to your preferred address without travelling from bureau to bureau.</p>
+        <div class="hero-actions"><button class="btn btn-lime" onclick="openModal('exchange')">Exchange money <span aria-hidden="true">↗</span></button><button class="btn btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button></div>
+        <div class="trustline"><div class="avatar-stack"><span class="avatar">✦</span><span class="avatar">✓</span><span class="avatar">◎</span><span class="avatar">+</span></div><span>Built around convenience, clarity &amp; trust</span></div>
+      </div>
+      <div class="hero-visual"><div class="glow"></div>
+        <div class="exchange-card">
+          <div class="card-head"><h2>Quick currency converter</h2><span class="live-pill"><span class="dot"></span> DEMO RATES</span></div>
+          <label class="field-label" for="fromAmount">YOU SEND</label>
+          <div class="money-field"><input id="fromAmount" class="amount-input" type="number" min="0" value="1000000" inputmode="decimal" aria-label="Amount to convert"/><label class="currency-select"><span class="flag" id="fromFlag">🇺🇬</span><select id="fromCurrency" aria-label="Currency to exchange from"><option value="UGX">UGX</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="KES">KES</option></select></label></div>
+          <div class="swap-row"><button class="swap-btn" onclick="swapCurrencies()" aria-label="Swap currencies">↕</button></div>
+          <label class="field-label" for="toAmount">YOU RECEIVE (ESTIMATE)</label>
+          <div class="money-field"><input id="toAmount" class="amount-input" type="text" value="$ 270.27" readonly aria-label="Estimated amount received"/><label class="currency-select"><span class="flag" id="toFlag">🇺🇸</span><select id="toCurrency" aria-label="Currency to exchange to"><option value="USD">USD</option><option value="UGX">UGX</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="KES">KES</option></select></label></div>
+          <div class="rate-note"><span id="rateText">Illustrative rate: 1 USD ≈ 3,700 UGX</span><strong>Fees shown before confirmation</strong></div>
+          <button class="btn btn-primary full" onclick="openModal('exchange')">Request an exchange ↗</button>
+          <p class="secure-note">⌁ No money moves in this demo. Real rates need provider integration.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section rates-section" id="rates"><div class="section-inner">
+      <div class="section-heading"><div><div class="kicker">Know before you go</div><h2 class="section-title">A clearer view of currency.</h2></div><p class="section-sub">Illustrative reference rates to demonstrate the experience. Final customer quotes should come from participating providers and may include fees.</p></div>
+      <div class="rate-grid" id="rateGrid"></div>
+    </div></section>
+    <section class="section" id="providers"><div class="section-inner">
+      <div class="section-heading"><div><div class="kicker">Your options, in one place</div><h2 class="section-title">Discover exchange providers.</h2></div><p class="section-sub">Compare offers and choose a convenient way to exchange. These sample cards are placeholders, not real or verified businesses.</p></div>
+        <div class="provider-grid">
+        <article class="provider-card"><div class="provider-head"><div class="provider-icon">🏦</div><span class="demo-tag">Sample listing</span></div><h3>City Exchange Partner</h3><p>Example provider profile · Kampala<br>Delivery requests · Subject to verification</p><div class="provider-bottom"><div><strong>Quote on request</strong><span>Rate confirmed before you proceed</span></div><button class="text-btn" onclick="openModal('exchange','City Exchange Partner')">Request quote ↗</button></div></article>
+        <article class="provider-card"><div class="provider-head"><div class="provider-icon">🌍</div><span class="demo-tag">Sample listing</span></div><h3>Global Currency Desk</h3><p>Example provider profile · Entebbe<br>Major currencies · Business enquiries</p><div class="provider-bottom"><div><strong>Quote on request</strong><span>Fees displayed before confirmation</span></div><button class="text-btn" onclick="openModal('exchange','Global Currency Desk')">Request quote ↗</button></div></article>
+        <article class="provider-card"><div class="provider-head"><div class="provider-icon">🚚</div><span class="demo-tag">Concept service</span></div><h3>Convenient Delivery</h3><p>Delivery concept · Eligible areas only<br>Subject to licensing, provider approval and safeguards</p><div class="provider-bottom"><div><strong>Availability varies</strong><span>Identity and delivery checks may apply</span></div><button class="text-btn" onclick="openModal('exchange','Convenient Delivery')">Check options ↗</button></div></article>
+      </div>
+    </div></section>
+    <section class="section" id="bureau"><div class="section-inner">
+      <div class="section-heading"><div><div class="kicker">For licensed forex bureaus</div><h2 class="section-title">Your rates. Your customers.</h2></div><p class="section-sub">Use a live market reference as a guide, then enter or confirm the actual buying and selling rates your bureau offers customers.</p></div>
+      <div class="bureau-panel"><div class="bureau-top"><div><h3>Provider dashboard preview</h3><p>Update your customer rates and respond to incoming quote requests in one place.</p></div><span class="reference-pill">REFERENCE + MANUAL CONFIRMATION</span></div>
+        <div class="bureau-rate-grid"><div class="bureau-rate"><h4>🇺🇸 USD / UGX</h4><label for="usdBuy">Bureau buys USD at</label><input id="usdBuy" type="number" value="3670" min="1"><label for="usdSell">Bureau sells USD at</label><input id="usdSell" type="number" value="3740" min="1"></div><div class="bureau-rate"><h4>🇪🇺 EUR / UGX</h4><label for="eurBuy">Bureau buys EUR at</label><input id="eurBuy" type="number" value="3960" min="1"><label for="eurSell">Bureau sells EUR at</label><input id="eurSell" type="number" value="4050" min="1"></div><div class="bureau-rate"><h4>🇬🇧 GBP / UGX</h4><label for="gbpBuy">Bureau buys GBP at</label><input id="gbpBuy" type="number" value="4650" min="1"><label for="gbpSell">Bureau sells GBP at</label><input id="gbpSell" type="number" value="4760" min="1"></div><div class="bureau-rate"><h4>🇰🇪 KES / UGX</h4><label for="kesBuy">Bureau buys KES at</label><input id="kesBuy" type="number" value="27.5" min="0.01" step="0.1"><label for="kesSell">Bureau sells KES at</label><input id="kesSell" type="number" value="29.5" min="0.01" step="0.1"></div></div>
+        <div class="bureau-actions"><span class="bureau-status" id="bureauStatus">Demo values only · Reference rates are illustrative, not live market data.</span><button class="btn btn-primary" onclick="saveDemoRates()">Save rates (demo) ↗</button></div>
+        <div class="inbox-demo"><h4>Sample quote enquiries</h4><div class="enquiry-row" id="enquiryOne"><div><strong>Enquiry #FL-1042 · Customer wants USD</strong><span>UGX 2,000,000 → USD · Kampala · Collection requested<br>Indicative quote needed before customer confirmation.</span></div><div class="enquiry-actions"><button class="btn btn-outline" onclick="respondEnquiry('enquiryOne','declined')">Decline</button><button class="btn btn-lime" onclick="respondEnquiry('enquiryOne','accepted')">Accept enquiry</button></div></div><div class="enquiry-row" id="enquiryTwo"><div><strong>Enquiry #FL-1043 · Customer wants UGX</strong><span>USD 500 → UGX · Entebbe · Asks about delivery<br>Confirm your rate, fees and service availability.</span></div><div class="enquiry-actions"><button class="btn btn-outline" onclick="respondEnquiry('enquiryTwo','declined')">Decline</button><button class="btn btn-lime" onclick="respondEnquiry('enquiryTwo','accepted')">Accept enquiry</button></div></div></div>
+      </div>
+      <p class="form-hint">This is a front-end demonstration only. Saving rates and accepting enquiries do not store data or contact a real customer. A production version needs secure bureau accounts, verified licensing, a database, and approved rate-data integrations.</p>
+    </div></section>
+    <section class="section rates-section" id="how"><div class="section-inner">
+      <div class="section-heading"><div><div class="kicker">Simple by design</div><h2 class="section-title">Three steps. Less running around.</h2></div><p class="section-sub">A straightforward experience from comparing rates to arranging your exchange.</p></div>
+      <div class="steps"><article class="step"><div class="step-num">01</div><h3>Choose your currencies</h3><p>Enter the amount you have and the currency you need. See an estimate and understand that the final quote comes from the provider.</p></article><article class="step"><div class="step-num">02</div><h3>Request delivery</h3><p>Share your delivery area and contact details, then compare quotes from participating providers that can serve your location.</p></article><article class="step"><div class="step-num">03</div><h3>Confirm securely</h3><p>Verify the provider, final rate, fees, delivery arrangements and identity checks before any transaction takes place.</p></article></div>
+    </div></section>
+    <section class="cta"><div><h2>Less travel. More time for life.</h2><p>We're building a more convenient way to find currency exchange services. Join the early-access list to help shape what comes next.</p></div><button class="btn btn-lime" onclick="openModal('join')">Join early access ↗</button></section>
+  </main>
+  <footer class="footer"><a href="#home" class="brand" style="text-decoration:none"><span class="brand-mark">↔</span>ForexLink</a><span>Designed for convenience. Built with trust in mind.</span><span>© 2026 ForexLink concept</span></footer>
+  <div class="disclaimer">Prototype only · Sample rates and provider profiles are illustrative. No real currency exchange, payments, bookings, or deliveries take place in this version. Real-money services require appropriate regulatory review and authorized partners.</div>
+</div>
+<div class="modal-backdrop" id="modalBackdrop" onclick="backdropClose(event)"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">Request an exchange</h2><button class="close-btn" onclick="closeModal()" aria-label="Close dialog">×</button></div><form id="mainForm" onsubmit="submitForm(event)"><div id="formFields"></div><button class="btn btn-primary full" id="formSubmit" type="submit">Continue</button><p class="form-hint" id="formHint">This prototype does not submit personal data to a server or move money.</p></form></section></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const rates = { USD:3700, EUR:4000, GBP:4700, KES:28.5, UGX:1 };
+const flags = { UGX:'🇺🇬', USD:'🇺🇸', EUR:'🇪🇺', GBP:'🇬🇧', KES:'🇰🇪' };
+const names = { UGX:'Ugandan Shilling', USD:'US Dollar', EUR:'Euro', GBP:'British Pound', KES:'Kenyan Shilling' };
+const moneyFmt = (value, currency) => new Intl.NumberFormat('en-UG',{maximumFractionDigits: currency==='UGX'||currency==='KES'?0:2,minimumFractionDigits: currency==='UGX'||currency==='KES'?0:2}).format(value);
+function convert(value, from, to){ return value * rates[from] / rates[to]; }
+function refreshConverter(){
+ const from=document.getElementById('fromCurrency').value, to=document.getElementById('toCurrency').value;
+ const amount=Math.max(0,Number(document.getElementById('fromAmount').value)||0);
+ document.getElementById('fromFlag').textContent=flags[from];document.getElementById('toFlag').textContent=flags[to];
+ document.getElementById('toAmount').value=flags[to]+' '+moneyFmt(convert(amount,from,to),to);
+ const rate= rates[from]/rates[to];
+ document.getElementById('rateText').textContent='Illustrative rate: 1 '+from+' ≈ '+moneyFmt(rate,to)+' '+to;
+}
+function swapCurrencies(){const a=document.getElementById('fromCurrency'),b=document.getElementById('toCurrency');const old=a.value;a.value=b.value;b.value=old;refreshConverter();}
+function renderRates(){
+ const items=[['USD','US Dollar'],['EUR','Euro'],['GBP','British Pound'],['KES','Kenyan Shilling']];
+ document.getElementById('rateGrid').innerHTML=items.map(([code,name])=>`<article class="rate-card"><div class="rate-top"><div class="currency-name"><span class="flag">${flags[code]}</span><div>${name}<span class="code">${code}</span></div></div><span style="color:#8fae60;font-size:18px">↗</span></div><div class="rate-value">${moneyFmt(rates[code],'UGX')} UGX</div><div class="rate-caption">Illustrative value for 1 ${code} · not a live quote</div></article>`).join('');
+}
+function saveDemoRates(){const values=[['USD','usdBuy','usdSell'],['EUR','eurBuy','eurSell'],['GBP','gbpBuy','gbpSell'],['KES','kesBuy','kesSell']];for(const [code,buyId,sellId] of values){const buy=Number(document.getElementById(buyId).value),sell=Number(document.getElementById(sellId).value);if(!(buy>0&&sell>0&&sell>=buy)){showToast('Check '+code+' rates: enter positive values and make sell rate at least the buy rate.');return;}}document.getElementById('bureauStatus').textContent='Demo rates checked just now · Changes are not saved to a server.';showToast('Rates validated in this demo. Nothing was published.');}
+function respondEnquiry(rowId,response){const row=document.getElementById(rowId);const actions=row.querySelector('.enquiry-actions');actions.innerHTML='<span class="reference-pill">'+(response==='accepted'?'ENQUIRY ACCEPTED · DEMO':'ENQUIRY DECLINED · DEMO')+'</span>';showToast(response==='accepted'?'Demo enquiry accepted. No customer was notified.':'Demo enquiry declined. No customer was notified.');}
+let activeMode='exchange';
+function openModal(mode='exchange', provider=''){
+ activeMode=mode;const title=document.getElementById('modalTitle'),fields=document.getElementById('formFields'),submit=document.getElementById('formSubmit'),hint=document.getElementById('formHint');
+ if(mode==='signin'){
+  title.textContent='Welcome back';submit.textContent='Sign in (demo)';fields.innerHTML='<div class="form-row"><label for="email">Email address</label><input id="email" type="email" placeholder="you@example.com" required></div><div class="form-row"><label for="password">Password</label><input id="password" type="password" placeholder="Enter any demo password" required></div>';hint.textContent='Demo only: no account is created and credentials are not sent anywhere.';
+ }else if(mode==='join'){
+  title.textContent='Get early access';submit.textContent='Join the list (demo)';fields.innerHTML='<div class="form-row"><label for="name">Your name</label><input id="name" autocomplete="name" placeholder="Full name" required></div><div class="form-row"><label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></div><div class="form-row"><label for="interest">What matters most to you?</label><select id="interest"><option>Compare exchange rates</option><option>Office or home delivery</option><option>Business currency exchange</option><option>Digital currency exchange</option></select></div>';hint.textContent='Demo only: this form does not send or store your information.';
+ }else{
+  title.textContent=provider?'Request a delivery quote':'Request currency delivery';submit.textContent='Review delivery request (demo)';fields.innerHTML=`<div class="form-row"><label for="sendAmount">Amount you want to exchange</label><input id="sendAmount" type="number" min="1" value="1000000" required></div><div class="form-row"><label for="sendCurrency">You have</label><select id="sendCurrency"><option value="UGX">🇺🇬 UGX — Ugandan Shilling</option><option value="USD">🇺🇸 USD — US Dollar</option><option value="EUR">🇪🇺 EUR — Euro</option><option value="GBP">🇬🇧 GBP — British Pound</option><option value="KES">🇰🇪 KES — Kenyan Shilling</option></select></div><div class="form-row"><label for="receiveCurrency">You need</label><select id="receiveCurrency"><option value="USD">🇺🇸 USD — US Dollar</option><option value="UGX">🇺🇬 UGX — Ugandan Shilling</option><option value="EUR">🇪🇺 EUR — Euro</option><option value="GBP">🇬🇧 GBP — British Pound</option><option value="KES">🇰🇪 KES — Kenyan Shilling</option></select></div><div class="form-row"><label for="area">Delivery area / address</label><input id="area" placeholder="e.g. Ntinda, Kampala; nearby landmark" required></div><div class="form-row"><label for="phone">Contact phone number</label><input id="phone" type="tel" autocomplete="tel" placeholder="e.g. +256 7XX XXX XXX" required></div><div class="form-row"><label for="deliveryNotes">Delivery instructions (optional)</label><input id="deliveryNotes" placeholder="Safe meeting point or other details"></div>${provider?`<div class="form-row"><label>Selected sample listing</label><input value="${provider}" readonly></div>`:''}`;hint.textContent='Prototype only. This request is not sent or stored, no money is taken, and no delivery is booked. Real delivery requires verified licensed partners, secure handling, and confirmation of the quote and fees.';
+ }
+ document.getElementById('modalBackdrop').classList.add('open');document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalBackdrop').classList.remove('open');document.body.style.overflow='';}
+function backdropClose(e){if(e.target.id==='modalBackdrop')closeModal();}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3600);}
+function submitForm(e){e.preventDefault();const messages={signin:'Demo sign-in only — account services are not connected yet.',join:'Thanks for your interest! Early-access signup is simulated in this prototype.',exchange:'Your sample request is ready to review. No real transaction or booking was created.'};closeModal();showToast(messages[activeMode]||'Demo action complete.');}
+document.getElementById('fromAmount').addEventListener('input',refreshConverter);
+document.getElementById('fromCurrency').addEventListener('change',refreshConverter);
+document.getElementById('toCurrency').addEventListener('change',refreshConverter);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+renderRates();refreshConverter();
+</script>
+</body>
+</html>
